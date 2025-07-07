@@ -1,0 +1,37 @@
+buildscript {
+    ext.kotlin_version = '1.9.20' // Set this to 1.9.20 as per the error message.
+    // If issues persist, try 1.9.22 or 1.9.24.
+    repositories {
+        google()
+        mavenCentral()
+    }
+
+    dependencies {
+        // Use a compatible Gradle plugin version.
+        // For Kotlin 1.9.x, Gradle plugin 7.4.x, 8.x.x are common.
+        // If you were previously using a different version, keep that if it worked.
+        // Otherwise, 8.1.1 is a good default for newer Flutter.
+        classpath 'com.android.tools.build:gradle:8.1.1'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+rootProject.buildDir = "../build"
+subprojects {
+    project.buildDir = "${rootProject.buildDir}/${project.name}"
+}
+subprojects {
+    project.evaluationDependsOn(":app")
+}
+
+tasks.register("clean", Delete) {
+    delete rootProject.buildDir
+}
